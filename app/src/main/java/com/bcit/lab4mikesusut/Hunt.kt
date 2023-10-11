@@ -1,8 +1,10 @@
-package com.bcit.lab4mikesusut
-
-import kotlin.random.Random
+import kotlin.properties.Delegates
 
 class Hunt(override val minion: Minion, item: Item? = null) : Mission(item), Repeatable {
+
+    override var repeatNum: Int by Delegates.vetoable(3) { _, _, new ->
+        new <= 3
+    }
 
     override fun determineMissionTime(): Int {
         val itemModifier = item?.timeModifier ?: 0
@@ -21,8 +23,6 @@ class Hunt(override val minion: Minion, item: Item? = null) : Mission(item), Rep
             else -> "nothing"
         }
     }
-
-    override val repeatNum = 3
 
     override fun repeat(times: Int, listener: MissionListener) {
         val toRepeat = if(times > repeatNum) repeatNum else times
